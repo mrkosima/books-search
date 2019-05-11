@@ -1,7 +1,7 @@
-# Book search
+# Book Search
 
 Playground with:
-- TypeScript
 - Custom Elements
+- TypeScript
 - Speech Recongition
 - [Open Library API](https://openlibrary.org/developers/api)
