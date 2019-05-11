@@ -1,0 +1,15 @@
+{
+  "name": "book-search",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mrkosima/book-search.git"
+  },
+  "author": "Kanstantsin Klimashevich <klimashevich.k@gmail.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/mrkosima/book-search#readme"
+}
