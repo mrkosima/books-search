@@ -10,7 +10,7 @@ import {
 export class ChromeChecker extends LitElement {
   @property({ type: String }) minVersion: string;
 
-  render() {
+  protected render() {
     if (!this.supported()) {
       let message: TemplateResult;
       if (this.isChrome() && this.minVersion) {

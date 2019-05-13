@@ -25,6 +25,9 @@ export class TimeAgo extends LitElement {
     super.disconnectedCallback();
   }
 
+  protected firstUpdated() {
+    this.updateFormattedDuration();
+  }
   protected render() {
     if (this.formattedDuration) {
       return html`
@@ -37,7 +40,9 @@ export class TimeAgo extends LitElement {
 
   protected updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
-    this.checkTimer();
+    if (changedProperties.has("time")) {
+      this.checkTimer();
+    }
   }
 
   private checkTimer = () => {

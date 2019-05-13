@@ -17,7 +17,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [".ts", ".js"]
+    extensions: [".ts", ".js", ".css"]
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -25,7 +25,7 @@ module.exports = {
       title: "Books Search",
       template: "./public/index.html",
       favicon: "./public/favicon.ico",
-      inject: "head",
+      inject: "head"
     })
   ]
 };

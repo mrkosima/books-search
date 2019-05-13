@@ -1,7 +1,9 @@
+import { booksMock } from "./mock";
 interface BookApi {
   title: string;
-  isbn: string[];
-  author_name: string[];
+  cover_i?: number;
+  isbn?: string[];
+  author_name?: string[];
 }
 
 interface BooksApi {
@@ -31,33 +33,36 @@ const prepareQueryString = (text: string) =>
 
 const fetchApi = <T>(path: string): Promise<T> =>
   fetch(path).then(res => res.json());
+  // new Promise((resolve, reject) => setTimeout(() => resolve(booksMock), 1000));
+
 
 const getCoverUrl = (
   key: "isbn" | "oclc" | "lccn" | "olid" | "id",
   value: string,
   size: "S" | "M" | "L"
-) => `http://covers.openlibrary.org/a/${key}/${value}-${size}.jpg`;
+) =>
+  `http://covers.openlibrary.org/a/${key}/${value}-${size}.jpg?default=false`;
 
-const getCoverUrls = (isbn: string): CoverUrils => ({
-  small: getCoverUrl("isbn", isbn, "S"),
-  medium: getCoverUrl("isbn", isbn, "M"),
-  large: getCoverUrl("isbn", isbn, "L")
+const getCoverUrls = (coverId: number): CoverUrils => ({
+  small: getCoverUrl("id", coverId.toString(), "S"),
+  medium: getCoverUrl("id", coverId.toString(), "M"),
+  large: getCoverUrl("id", coverId.toString(), "L")
 });
 
 const convertBooksApi = (booksApi: BooksApi): Books => {
   return booksApi.docs
-    .filter(book => book.author_name && book.isbn && book.isbn.length > 0)
+    .filter(
+      book =>
+        book.author_name && book.cover_i && book.isbn && book.isbn.length > 0
+    )
     .map(book => ({
       id: book.isbn[0],
       authorName: book.author_name.join(", "),
-      coverUrls: getCoverUrls(book.isbn[0])
+      coverUrls: getCoverUrls(book.cover_i)
     }));
 };
 
 export const searchBooks = (text: string): Promise<Books> =>
   fetchApi<BooksApi>(`${SEARCH_API}?q=${prepareQueryString(text)}`).then(
-    books => convertBooksApi(books).slice(0, 5)
+    books => convertBooksApi(books)
   );
-
-//   http://covers.openlibrary.org/a/$key/$value-$size.jpg
-//   http://covers.openlibrary.org/a/isbn/$value-$size.jpg

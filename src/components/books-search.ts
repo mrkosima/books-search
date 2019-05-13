@@ -12,43 +12,46 @@ export class BooksSearch extends LitElement {
 
   private searchText: string = "";
   private loading: boolean = false;
+  private error: string;
   private updateTime: number;
-
-  static get styles() {
-    return css`
-      * {
-        color: green;
-      }
-    `;
-  }
 
   static get properties() {
     return {
-      books: { attribute: false, type: Array },
-      searchText: { attribute: false, type: String },
-      loading: { attribute: false, type: Boolean, reflect: true },
-      updateTime: { attribute: false, type: Number }
+      books: { type: Array },
+      searchText: { type: String },
+      loading: { type: Boolean, reflect: true },
+      error: { type: String, reflect: true },
+      updateTime: { type: Number }
     };
   }
 
   protected render() {
-    const content = this.loading
-      ? html`
-          <custom-loader></custom-loader>
-        `
-      : html`
-          <books-gallery .books=${this.books}></books-gallery>
+    let content;
+    if (this.error) {
+      content = html`<p>${this.error}</p>`;
+    } else if (this.loading) {
+      content = html`
+        <custom-loader></custom-loader>
+      `;
+    } else if (!this.books || !this.books.length) {
+      if (this.updateTime) {
+        content = html`
+          <p>No results found</p>
         `;
-
+      }
+    } else {
+      content = html`
+        <time-ago .time=${this.updateTime}></time-ago>
+        <books-gallery .books=${this.books}></books-gallery>
+      `;
+    }
     return html`
-      <h1>Hello</h1>
-      <voice-input
-        placeholder="Search"
-        language="en"
-        @valueChanged=${this.onSearchChanged}
-      ></voice-input>
-      <time-ago .time=${this.updateTime}></time-ago>
-      ${content}
+        <voice-input
+          placeholder="Search"
+          language="en"
+          @valueChanged=${this.onSearchChanged}
+        ></voice-input>
+        ${content}
     `;
   }
 
@@ -65,6 +68,7 @@ export class BooksSearch extends LitElement {
 
   private fetchData = (searchText: string) => {
     this.loading = true;
+    this.error = null;
     searchBooks(searchText).then(this.handleBooksLoaded, this.handleError);
   };
 
@@ -74,9 +78,10 @@ export class BooksSearch extends LitElement {
     this.updateTime = Date.now();
   };
 
-  private handleError = (error: any) => {
-    console.warn(error);
+  private handleError = () => {
     this.loading = false;
+    this.books = [];
     this.updateTime = null;
+    this.error = "Something went wrong";
   };
 }
