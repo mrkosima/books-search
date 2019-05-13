@@ -22,7 +22,7 @@ export interface Book {
 
 export type Books = Book[];
 
-const SEARCH_API = "http://openlibrary.org/search.json";
+const SEARCH_API = "https://openlibrary.org/search.json";
 
 const prepareQueryString = (text: string) =>
   text
@@ -41,7 +41,7 @@ const getCoverUrl = (
   value: string,
   size: "S" | "M" | "L"
 ) =>
-  `http://covers.openlibrary.org/a/${key}/${value}-${size}.jpg?default=false`;
+  `https://covers.openlibrary.org/a/${key}/${value}-${size}.jpg?default=false`;
 
 const getCoverUrls = (coverId: number): CoverUrils => ({
   small: getCoverUrl("id", coverId.toString(), "S"),

@@ -7,8 +7,9 @@ module.exports = {
     booksSearch: "./src"
   },
   output: {
-    filename: "[name].[chunkhash].bundle.js",
-    path: path.resolve(__dirname, "build")
+    filename: "static/[name].[chunkhash].bundle.js",
+    path: path.resolve(__dirname, "build"),
+
   },
   module: {
     rules: [
@@ -25,7 +26,8 @@ module.exports = {
       title: "Books Search",
       template: "./public/index.html",
       favicon: "./public/favicon.ico",
-      inject: "head"
+      inject: "head",
+      baseUrl: "/"
     })
   ]
 };
